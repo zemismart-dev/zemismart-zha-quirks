@@ -22,6 +22,8 @@ from zhaquirks.tuya import (
 
 try:
     import zigpy.types as t
+    from zigpy.zcl import foundation
+    from zigpy.quirks.v2 import EntityType
     from zhaquirks.tuya.builder import TuyaQuirkBuilder
 
     _BUILDER_OK = True
@@ -47,10 +49,55 @@ if _BUILDER_OK:
         delete_all_limits = 0x04
 
 
+    class Mode(t.enum8):
+        """Motor mode reported by the device."""
+
+        morning = 0x00
+        night = 0x01
+
+
+    class WorkState(t.enum8):
+        """Current motor motion state."""
+
+        opening = 0x00
+        closing = 0x01
+
+
+    class SituationSet(t.enum8):
+        """Limit reached event reported by the device."""
+
+        fully_open = 0x00
+        fully_close = 0x01
+
+
+    class ClickControl(t.enum8):
+        """Short nudge command."""
+
+        up = 0x00
+        down = 0x01
+
+
+    def enum_name(enum_cls: type[t.enum8], value: int) -> str:
+        """Convert Tuya enum values to stable diagnostic strings."""
+
+        try:
+            return enum_cls(value).name
+        except ValueError:
+            return f"unknown_{value}"
+
+
     (
         TuyaQuirkBuilder("_TZE284_6hrnp30w", "TS0601")
+        .tuya_enchantment(data_query_spell=True)
         .tuya_cover(control_dp=1, position_state_dp=3, position_control_dp=2, invert=True)
         .tuya_battery(dp_id=13)
+        .tuya_enum(
+            dp_id=4,
+            attribute_name="mode",
+            enum_class=Mode,
+            translation_key="mode",
+            fallback_name="Mode",
+        )
         .tuya_enum(
             dp_id=5,
             attribute_name="motor_direction",
@@ -58,12 +105,91 @@ if _BUILDER_OK:
             translation_key="motor_direction",
             fallback_name="Motor direction",
         )
+        .tuya_dp_attribute(
+            dp_id=7,
+            attribute_name="work_state",
+            type=t.CharacterString,
+            converter=lambda value: enum_name(WorkState, value),
+            access=foundation.ZCLAttributeAccess.Read,
+        )
+        .sensor(
+            attribute_name="work_state",
+            cluster_id=0xEF00,
+            translation_key="work_state",
+            fallback_name="Work state",
+            entity_type=EntityType.DIAGNOSTIC,
+        )
+        .tuya_dp_attribute(
+            dp_id=10,
+            attribute_name="time_total",
+            type=t.uint32_t,
+            access=foundation.ZCLAttributeAccess.Read,
+        )
+        .sensor(
+            attribute_name="time_total",
+            cluster_id=0xEF00,
+            translation_key="time_total",
+            fallback_name="Travel time",
+            entity_type=EntityType.DIAGNOSTIC,
+            unit="ms",
+        )
+        .tuya_dp_attribute(
+            dp_id=11,
+            attribute_name="situation_set",
+            type=t.CharacterString,
+            converter=lambda value: enum_name(SituationSet, value),
+            access=foundation.ZCLAttributeAccess.Read,
+        )
+        .sensor(
+            attribute_name="situation_set",
+            cluster_id=0xEF00,
+            translation_key="situation_set",
+            fallback_name="Limit reached",
+            entity_type=EntityType.DIAGNOSTIC,
+        )
+        .tuya_dp_attribute(
+            dp_id=12,
+            attribute_name="motor_fault",
+            type=t.uint8_t,
+            access=foundation.ZCLAttributeAccess.Read,
+        )
+        .sensor(
+            attribute_name="motor_fault",
+            cluster_id=0xEF00,
+            translation_key="motor_fault",
+            fallback_name="Motor fault",
+            entity_type=EntityType.DIAGNOSTIC,
+        )
         .tuya_enum(
             dp_id=16,
             attribute_name="limit_action",
             enum_class=LimitAction,
             translation_key="limit_action",
             fallback_name="Limit action",
+        )
+        .tuya_dp_attribute(
+            dp_id=20,
+            attribute_name="click_control",
+            type=ClickControl,
+            access=foundation.ZCLAttributeAccess.Write,
+        )
+        .write_attr_button(
+            attribute_name="click_control",
+            attribute_value=0x00,
+            cluster_id=0xEF00,
+            unique_id_suffix="nudge_up",
+            translation_key="nudge_up",
+            fallback_name="Nudge up",
+            entity_type=EntityType.STANDARD,
+        )
+        .write_attr_button(
+            attribute_name="click_control",
+            attribute_value=0x01,
+            cluster_id=0xEF00,
+            unique_id_suffix="nudge_down",
+            translation_key="nudge_down",
+            fallback_name="Nudge down",
+            entity_type=EntityType.STANDARD,
         )
         .skip_configuration()
         .add_to_registry()
