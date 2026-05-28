@@ -39,6 +39,16 @@ if _BUILDER_OK:
         back = 0x01
 
 
+    class LimitAction(t.enum8):
+        """Limit configuration actions exposed by the Tuya MCU."""
+
+        set_upper_limit = 0x00
+        set_lower_limit = 0x01
+        delete_upper_limit = 0x02
+        delete_lower_limit = 0x03
+        delete_all_limits = 0x04
+
+
     class WorkState(t.enum8):
         """Current motor motion state."""
 
@@ -73,6 +83,13 @@ if _BUILDER_OK:
             enum_class=MotorDirection,
             translation_key="motor_direction",
             fallback_name="Motor direction",
+        )
+        .tuya_enum(
+            dp_id=16,
+            attribute_name="limit_action",
+            enum_class=LimitAction,
+            translation_key="limit_action",
+            fallback_name="Limit action",
         )
         .tuya_dp_attribute(
             dp_id=7,
