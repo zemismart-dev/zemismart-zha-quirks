@@ -39,35 +39,11 @@ if _BUILDER_OK:
         back = 0x01
 
 
-    class LimitAction(t.enum8):
-        """Limit configuration actions exposed by the Tuya MCU."""
-
-        set_upper_limit = 0x00
-        set_lower_limit = 0x01
-        delete_upper_limit = 0x02
-        delete_lower_limit = 0x03
-        delete_all_limits = 0x04
-
-
-    class Mode(t.enum8):
-        """Motor mode reported by the device."""
-
-        morning = 0x00
-        night = 0x01
-
-
     class WorkState(t.enum8):
         """Current motor motion state."""
 
         opening = 0x00
         closing = 0x01
-
-
-    class SituationSet(t.enum8):
-        """Limit reached event reported by the device."""
-
-        fully_open = 0x00
-        fully_close = 0x01
 
 
     class ClickControl(t.enum8):
@@ -92,13 +68,6 @@ if _BUILDER_OK:
         .tuya_cover(control_dp=1, position_state_dp=3, position_control_dp=2, invert=True)
         .tuya_battery(dp_id=13)
         .tuya_enum(
-            dp_id=4,
-            attribute_name="mode",
-            enum_class=Mode,
-            translation_key="mode",
-            fallback_name="Mode",
-        )
-        .tuya_enum(
             dp_id=5,
             attribute_name="motor_direction",
             enum_class=MotorDirection,
@@ -118,54 +87,6 @@ if _BUILDER_OK:
             translation_key="work_state",
             fallback_name="Work state",
             entity_type=EntityType.DIAGNOSTIC,
-        )
-        .tuya_dp_attribute(
-            dp_id=10,
-            attribute_name="time_total",
-            type=t.uint32_t,
-            access=foundation.ZCLAttributeAccess.Read,
-        )
-        .sensor(
-            attribute_name="time_total",
-            cluster_id=0xEF00,
-            translation_key="time_total",
-            fallback_name="Travel time",
-            entity_type=EntityType.DIAGNOSTIC,
-            unit="ms",
-        )
-        .tuya_dp_attribute(
-            dp_id=11,
-            attribute_name="situation_set",
-            type=t.CharacterString,
-            converter=lambda value: enum_name(SituationSet, value),
-            access=foundation.ZCLAttributeAccess.Read,
-        )
-        .sensor(
-            attribute_name="situation_set",
-            cluster_id=0xEF00,
-            translation_key="situation_set",
-            fallback_name="Limit reached",
-            entity_type=EntityType.DIAGNOSTIC,
-        )
-        .tuya_dp_attribute(
-            dp_id=12,
-            attribute_name="motor_fault",
-            type=t.uint8_t,
-            access=foundation.ZCLAttributeAccess.Read,
-        )
-        .sensor(
-            attribute_name="motor_fault",
-            cluster_id=0xEF00,
-            translation_key="motor_fault",
-            fallback_name="Motor fault",
-            entity_type=EntityType.DIAGNOSTIC,
-        )
-        .tuya_enum(
-            dp_id=16,
-            attribute_name="limit_action",
-            enum_class=LimitAction,
-            translation_key="limit_action",
-            fallback_name="Limit action",
         )
         .tuya_dp_attribute(
             dp_id=20,
@@ -190,6 +111,16 @@ if _BUILDER_OK:
             translation_key="nudge_down",
             fallback_name="Nudge down",
             entity_type=EntityType.STANDARD,
+        )
+        .prevent_default_entity_creation(
+            endpoint_id=1,
+            cluster_id=TuyaWindowCoverControl.cluster_id,
+            unique_id_suffix="1-258-window_covering_type",
+        )
+        .prevent_default_entity_creation(
+            endpoint_id=1,
+            cluster_id=Ota.cluster_id,
+            unique_id_suffix="1-25-firmware_update",
         )
         .skip_configuration()
         .add_to_registry()
