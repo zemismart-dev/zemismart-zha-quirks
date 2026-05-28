@@ -12,6 +12,19 @@
 | `ZMS-206.py` | `TS0601` | `_TZE284_e4pf6l87`, `_TZE284_xvywzhmi` | 3 路屏显开关 |
 | `ZMS-206.py` | `TS0601` | `_TZE284_y4jqpry8`, `_TZE284_xibaabmu`, `_TZE28C1000000_xibaabmu` | 4 路屏显开关 |
 | `ZN2S-L01E-SMB.py` | `TS0601` | `_TZE200_ephrk8to`, `_TZE200_ahyyfhqk`, `_TZE200_zuphzsmo`, `_TZE200_6si1pnia` | Zemismart 1/2/3/4 路场景开关，支持开关模式和场景模式切换 |
+| `kes-606-复合开关.py` | `TS0726` | `_TZ3000_ovbvmhiq`, `_TZ3000_icoxotza`, `_TZ3000_cziew6eu`, `_TZ3000_hurauima` | KES 606 复合场景开关 1/2/3/4 路，支持 ZHA 开关、开关模式、上电状态和场景事件 |
 | `ts0301_cirjrpxe_zm25z.py` | `TS0301` | `_TZE200_cirjrpxe` | ZM25Z 强电窗帘电机，支持位置、方向和限位动作 |
 | `zemismart-zpm1-zha.py` | `TS0601` | `_TZE284_6hrnp30w` | ZMP1 卷帘/窗帘电机 v2 quirk |
 | `zm609.py` | `TS0601` | `_TZE284_o409r73p`, `_TZE28C1000000_o409r73p` | ZM609 两路美标屏显开关，支持开关、计量、屏显和配置项 |
+
+## 安装说明
+
+将需要的 quirk 文件复制到 Home Assistant 的 `/config/zha_quirks/` 目录，并在 `configuration.yaml` 中启用：
+
+```yaml
+zha:
+  enable_quirks: true
+  custom_quirks_path: /config/zha_quirks
+```
+
+复制后重启 Home Assistant。如果当前 HA 版本不能加载带横杠或中文的 Python 文件名，请将 `kes-606-复合开关.py` 改名为有效的 Python 模块名，例如 `kes_606_composite_switch.py`，文件内容无需修改。
