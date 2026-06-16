@@ -49,27 +49,11 @@ if _BUILDER_OK:
         delete_all_limits = 0x04
 
 
-    class WorkState(t.enum8):
-        """Current motor motion state."""
-
-        opening = 0x00
-        closing = 0x01
-
-
     class ClickControl(t.enum8):
         """Short nudge command."""
 
         up = 0x00
         down = 0x01
-
-
-    def enum_name(enum_cls: type[t.enum8], value: int) -> str:
-        """Convert Tuya enum values to stable diagnostic strings."""
-
-        try:
-            return enum_cls(value).name
-        except ValueError:
-            return f"unknown_{value}"
 
 
     (
@@ -90,20 +74,6 @@ if _BUILDER_OK:
             enum_class=LimitAction,
             translation_key="limit_action",
             fallback_name="Limit action",
-        )
-        .tuya_dp_attribute(
-            dp_id=7,
-            attribute_name="work_state",
-            type=t.CharacterString,
-            converter=lambda value: enum_name(WorkState, value),
-            access=foundation.ZCLAttributeAccess.Read,
-        )
-        .sensor(
-            attribute_name="work_state",
-            cluster_id=0xEF00,
-            translation_key="work_state",
-            fallback_name="Work state",
-            entity_type=EntityType.DIAGNOSTIC,
         )
         .tuya_dp_attribute(
             dp_id=20,
