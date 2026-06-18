@@ -4,6 +4,7 @@
 
 | 配置文件 | ZHA 匹配型号 | 指纹型号 / manufacturerName | 说明 |
 | --- | --- | --- | --- |
+| `214c.py` | `TS0601` | `_TZE284_vuwtqx0t` | 214C 超声波水表阀，支持累计用水、阀门开关、自动清洗、瞬时流量、温度和电压 |
 | `223f.py` | `TS0601` | `_TZE200_jt50ea5d` | DN15-223F 超声波热量表，支持热量、水量、温度、电压等传感器 |
 | `DN15-223F.py` | `TS0601` | `_TZE200_jt50ea5d` | DN15-223F 超声波热量表 quirk |
 | `ZMP1.py` | `TS0601` | `_TZE284_6hrnp30w` | ZMP1 链条窗帘/卷帘电机，支持位置、电量自动刷新、方向、限位动作和点动 |
@@ -26,4 +27,4 @@ zha:
   custom_quirks_path: /config/zha_quirks
 ```
 
-复制后重启 Home Assistant。如果当前 HA 版本不能加载带横杠或中文的 Python 文件名，请将 `kes-606-复合开关.py` 改名为有效的 Python 模块名，例如 `kes_606_composite_switch.py`，文件内容无需修改。
+复制后重启 Home Assistant。如果当前 HA 版本不能加载数字开头、带横杠或中文的 Python 文件名，请将 `214c.py` 改名为 `water_valve_214c.py`，或将 `kes-606-复合开关.py` 改名为 `kes_606_composite_switch.py`，文件内容无需修改。
