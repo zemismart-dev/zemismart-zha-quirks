@@ -268,9 +268,6 @@ class O409r73pElectricalMeasurement(TuyaLocalCluster, TuyaZBElectricalMeasuremen
 
     _CONSTANT_ATTRIBUTES = {
         **TuyaZBElectricalMeasurement._CONSTANT_ATTRIBUTES,
-        TuyaZBElectricalMeasurement.AttributeDefs.rms_current.id: 0,
-        TuyaZBElectricalMeasurement.AttributeDefs.active_power.id: 0,
-        TuyaZBElectricalMeasurement.AttributeDefs.rms_voltage.id: 0,
         TuyaZBElectricalMeasurement.AttributeDefs.ac_current_multiplier.id: 1,
         TuyaZBElectricalMeasurement.AttributeDefs.ac_current_divisor.id: 1000,
         TuyaZBElectricalMeasurement.AttributeDefs.ac_power_multiplier.id: 1,
@@ -305,7 +302,6 @@ class O409r73pMetering(TuyaLocalCluster, TuyaZBMeteringClusterWithUnit):
 
     _CONSTANT_ATTRIBUTES = {
         **TuyaZBMeteringClusterWithUnit._CONSTANT_ATTRIBUTES,
-        TuyaZBMeteringClusterWithUnit.AttributeDefs.current_summ_delivered.id: 0,
         TuyaZBMeteringClusterWithUnit.AttributeDefs.status.id: 0x00,
         TuyaZBMeteringClusterWithUnit.AttributeDefs.multiplier.id: 1,
         TuyaZBMeteringClusterWithUnit.AttributeDefs.divisor.id: 1000,
@@ -335,21 +331,6 @@ class Countdown2Cluster(TuyaConfigNumber):
     _CONSTANT_ATTRIBUTES = {
         **TuyaConfigNumber._CONSTANT_ATTRIBUTES,
         AnalogOutput.AttributeDefs.description.id: "开关2倒计时",
-        AnalogOutput.AttributeDefs.min_present_value.id: 0,
-        AnalogOutput.AttributeDefs.max_present_value.id: 43200,
-        AnalogOutput.AttributeDefs.resolution.id: 1,
-        AnalogOutput.AttributeDefs.engineering_units.id: 73,
-    }
-
-
-class Countdown3Cluster(TuyaConfigNumber):
-    """DP9: Relay 3 countdown in seconds."""
-
-    dp_id = 9
-
-    _CONSTANT_ATTRIBUTES = {
-        **TuyaConfigNumber._CONSTANT_ATTRIBUTES,
-        AnalogOutput.AttributeDefs.description.id: "开关3倒计时",
         AnalogOutput.AttributeDefs.min_present_value.id: 0,
         AnalogOutput.AttributeDefs.max_present_value.id: 43200,
         AnalogOutput.AttributeDefs.resolution.id: 1,
@@ -419,17 +400,6 @@ class Relay2PowerOnBehaviorCluster(PowerOnBehaviorCluster):
     _CONSTANT_ATTRIBUTES = {
         **PowerOnBehaviorCluster._CONSTANT_ATTRIBUTES,
         AnalogOutput.AttributeDefs.description.id: "开关2上电状态 0=关 1=开 2=记忆",
-    }
-
-
-class Relay3PowerOnBehaviorCluster(PowerOnBehaviorCluster):
-    """DP31: Relay 3 power-on behavior enum."""
-
-    dp_id = 31
-
-    _CONSTANT_ATTRIBUTES = {
-        **PowerOnBehaviorCluster._CONSTANT_ATTRIBUTES,
-        AnalogOutput.AttributeDefs.description.id: "开关3上电状态 0=关 1=开 2=记忆",
     }
 
 
@@ -600,7 +570,7 @@ class O409r73pManufCluster(MoesSwitchManufCluster):
 
 
 class O409r73p3GangManufCluster(O409r73pManufCluster):
-    """3-gang manufacturer cluster with extra ZM609 configuration DPs."""
+    """3-gang manufacturer cluster with third relay DPs."""
 
     attributes_to_dp_converters = {
         **O409r73pManufCluster.attributes_to_dp_converters,
@@ -610,55 +580,6 @@ class O409r73p3GangManufCluster(O409r73pManufCluster):
     dp_to_attribute = O409r73pManufCluster.dp_to_attribute.copy()
     dp_to_attribute.update(
         {
-            7: DPToAttributeMapping(
-                Countdown1Cluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=4,
-            ),
-            8: DPToAttributeMapping(
-                Countdown2Cluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=5,
-            ),
-            9: DPToAttributeMapping(
-                Countdown3Cluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=6,
-            ),
-            14: DPToAttributeMapping(
-                PowerOnBehaviorCluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=7,
-            ),
-            16: DPToAttributeMapping(
-                RadarEnabledCluster.ep_attribute,
-                "present_value",
-                converter=lambda x: bool(x),
-                dp_converter=lambda x: bool(x),
-                endpoint_id=9,
-            ),
-            104: DPToAttributeMapping(
-                RadarDistanceCluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=10,
-            ),
-            111: DPToAttributeMapping(
-                ScreenOffTimeCluster.ep_attribute,
-                "present_value",
-                converter=lambda x: float(x),
-                dp_converter=lambda x: int(round(x)),
-                endpoint_id=11,
-            ),
             31: DPToAttributeMapping(
                 O409r73pRelayOnOffCluster.ep_attribute,
                 "power_on_state",
@@ -673,13 +594,6 @@ class O409r73p3GangManufCluster(O409r73pManufCluster):
     data_point_handlers = O409r73pManufCluster.data_point_handlers.copy()
     data_point_handlers.update(
         {
-            7: "_dp_2_attr_update",
-            8: "_dp_2_attr_update",
-            9: "_dp_2_attr_update",
-            14: "_dp_2_attr_update",
-            16: "_dp_2_attr_update",
-            104: "_dp_2_attr_update",
-            111: "_dp_2_attr_update",
             31: "_dp_2_attr_update",
             107: "_dp_2_attr_update",
         }
@@ -930,52 +844,10 @@ class Ts0601Tze284Oy1nuaa5Switch(Ts0601Tze284O409r73pSwitch):
                 INPUT_CLUSTERS: [O409r73pRelayOnOffCluster],
                 OUTPUT_CLUSTERS: [],
             },
-            4: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [Countdown1Cluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            5: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [Countdown2Cluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            6: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [Countdown3Cluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            7: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [PowerOnBehaviorCluster],
-                OUTPUT_CLUSTERS: [],
-            },
             8: {
                 PROFILE_ID: zha.PROFILE_ID,
                 DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
                 INPUT_CLUSTERS: [BacklightBrightnessCluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            9: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [RadarEnabledCluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            10: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [RadarDistanceCluster],
-                OUTPUT_CLUSTERS: [],
-            },
-            11: {
-                PROFILE_ID: zha.PROFILE_ID,
-                DEVICE_TYPE: zha.DeviceType.COMBINED_INTERFACE,
-                INPUT_CLUSTERS: [ScreenOffTimeCluster],
                 OUTPUT_CLUSTERS: [],
             },
             12: {
