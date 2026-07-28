@@ -782,7 +782,7 @@ class Ts0601Tze28C1000000O409r73pSwitch(Ts0601Tze284O409r73pSwitch):
 
 
 class Ts0601Tze284Oy1nuaa5Switch(Ts0601Tze284O409r73pSwitch):
-    """ZM609 3-gang panel with screen, radar controls and power metering."""
+    """ZMZ609 3-gang panel with screen, radar controls and power metering."""
 
     signature = {
         MODELS_INFO: [
