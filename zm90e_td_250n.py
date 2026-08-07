@@ -8,12 +8,15 @@ Tuya datapoints:
 * DP 2: target position
 * DP 3: arrived position
 * DP 5: motor direction
+* DP 103 / 104 / 105: open / middle / close limit actions
 * DP 106: motor working mode
 """
 
 from __future__ import annotations
 
 import zigpy.types as t
+from zha.application import EntityType
+from zigpy.zcl import foundation
 from zigpy.zcl.clusters.general import Ota
 
 from zhaquirks.tuya import TuyaWindowCoverControl
@@ -45,6 +48,78 @@ class ZM90EMotorWorkingMode(t.enum8):
         enum_class=ZM90EMotorDirection,
         translation_key="motor_direction",
         fallback_name="Motor direction",
+    )
+    .tuya_dp_attribute(
+        dp_id=103,
+        attribute_name="open_limit",
+        type=t.Bool,
+        access=foundation.ZCLAttributeAccess.Write,
+    )
+    .write_attr_button(
+        attribute_name="open_limit",
+        attribute_value=True,
+        cluster_id=0xEF00,
+        unique_id_suffix="set_open_limit",
+        translation_key="set_open_limit",
+        fallback_name="Set open limit",
+        entity_type=EntityType.STANDARD,
+    )
+    .write_attr_button(
+        attribute_name="open_limit",
+        attribute_value=False,
+        cluster_id=0xEF00,
+        unique_id_suffix="reset_open_limit",
+        translation_key="reset_open_limit",
+        fallback_name="Reset open limit",
+        entity_type=EntityType.STANDARD,
+    )
+    .tuya_dp_attribute(
+        dp_id=104,
+        attribute_name="middle_limit",
+        type=t.Bool,
+        access=foundation.ZCLAttributeAccess.Write,
+    )
+    .write_attr_button(
+        attribute_name="middle_limit",
+        attribute_value=True,
+        cluster_id=0xEF00,
+        unique_id_suffix="set_middle_limit",
+        translation_key="set_middle_limit",
+        fallback_name="Set middle limit",
+        entity_type=EntityType.STANDARD,
+    )
+    .write_attr_button(
+        attribute_name="middle_limit",
+        attribute_value=False,
+        cluster_id=0xEF00,
+        unique_id_suffix="reset_middle_limit",
+        translation_key="reset_middle_limit",
+        fallback_name="Reset middle limit",
+        entity_type=EntityType.STANDARD,
+    )
+    .tuya_dp_attribute(
+        dp_id=105,
+        attribute_name="close_limit",
+        type=t.Bool,
+        access=foundation.ZCLAttributeAccess.Write,
+    )
+    .write_attr_button(
+        attribute_name="close_limit",
+        attribute_value=True,
+        cluster_id=0xEF00,
+        unique_id_suffix="set_close_limit",
+        translation_key="set_close_limit",
+        fallback_name="Set close limit",
+        entity_type=EntityType.STANDARD,
+    )
+    .write_attr_button(
+        attribute_name="close_limit",
+        attribute_value=False,
+        cluster_id=0xEF00,
+        unique_id_suffix="reset_close_limit",
+        translation_key="reset_close_limit",
+        fallback_name="Reset close limit",
+        entity_type=EntityType.STANDARD,
     )
     .tuya_enum(
         dp_id=106,
