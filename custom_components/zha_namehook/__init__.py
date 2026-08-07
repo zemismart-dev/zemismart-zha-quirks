@@ -20,9 +20,10 @@ from .handlers.matter import handle_matter_name_update
 from .handlers.tuya_zha import handle_tuya_zha_name_update, write_tuya_zha_name
 
 DOMAIN = "zha_namehook"
-VERSION = "2.1.0"
+VERSION = "2.1.1"
 
 CONF_ENTITY_CHANNELS = "entity_channels"
+CONF_ENTITY_NAME_DPS = "entity_name_dps"
 CONF_STARTUP_SYNC_IEEES = "startup_sync_ieees"
 CONF_STARTUP_SYNC_DELAY = "startup_sync_delay"
 
@@ -41,6 +42,9 @@ CONFIG_SCHEMA = vol.Schema(
                 {
                     vol.Optional(CONF_ENTITY_CHANNELS, default={}): {
                         cv.entity_id: vol.All(vol.Coerce(int), vol.Range(min=1, max=4))
+                    },
+                    vol.Optional(CONF_ENTITY_NAME_DPS, default={}): {
+                        cv.entity_id: vol.All(vol.Coerce(int), vol.Range(min=1, max=255))
                     },
                     vol.Optional(CONF_STARTUP_SYNC_IEEES, default=[]): vol.All(
                         cv.ensure_list, [cv.string]
@@ -110,6 +114,10 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
         str(entity_id): int(channel)
         for entity_id, channel in domain_config.get(CONF_ENTITY_CHANNELS, {}).items()
     }
+    entity_name_dps = {
+        str(entity_id): int(dp_id)
+        for entity_id, dp_id in domain_config.get(CONF_ENTITY_NAME_DPS, {}).items()
+    }
     startup_sync_ieees = {
         str(ieee).lower() for ieee in domain_config.get(CONF_STARTUP_SYNC_IEEES, [])
     }
@@ -119,6 +127,7 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
 
     hass.data[DOMAIN] = {
         CONF_ENTITY_CHANNELS: entity_channels,
+        CONF_ENTITY_NAME_DPS: entity_name_dps,
         CONF_STARTUP_SYNC_IEEES: startup_sync_ieees,
     }
 
@@ -173,6 +182,7 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
             str(new_name),
             channel=call.data.get("channel"),
             entity_channels=entity_channels,
+            entity_name_dps=entity_name_dps,
         )
         if not success:
             _LOGGER.warning("Could not sync entity name for %s", entity_id)
@@ -192,7 +202,10 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
 
     async def _entity_registry_update_handler(event) -> None:
         await async_entity_registry_update_handler(
-            hass, event, entity_channels=entity_channels
+            hass,
+            event,
+            entity_channels=entity_channels,
+            entity_name_dps=entity_name_dps,
         )
 
     cancel_listener = hass.bus.async_listen(
@@ -206,6 +219,7 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
                 hass,
                 startup_sync_ieees=startup_sync_ieees,
                 entity_channels=entity_channels,
+                entity_name_dps=entity_name_dps,
                 delay=startup_sync_delay,
             )
         )
@@ -235,6 +249,7 @@ async def _startup_sync_known_zha_names(
     *,
     startup_sync_ieees: set[str],
     entity_channels: dict[str, int],
+    entity_name_dps: dict[str, int],
     delay: float,
 ) -> None:
     """Sync configured devices once after Home Assistant has started."""
@@ -264,6 +279,7 @@ async def _startup_sync_known_zha_names(
             device_entry,
             name,
             entity_channels=entity_channels,
+            entity_name_dps=entity_name_dps,
         )
 
 
@@ -272,6 +288,7 @@ async def async_entity_registry_update_handler(
     event,
     *,
     entity_channels: dict[str, int] | None = None,
+    entity_name_dps: dict[str, int] | None = None,
 ) -> None:
     """Dispatch entity name updates to the matching device display-name writer."""
 
@@ -306,6 +323,7 @@ async def async_entity_registry_update_handler(
         device_entry,
         new_name,
         entity_channels=entity_channels or {},
+        entity_name_dps=entity_name_dps or {},
     )
     if not success:
         _LOGGER.warning("Failed to sync display name for entity %s", entity_id)
@@ -335,6 +353,7 @@ async def _sync_device_display_name(
     *,
     channel: int | None = None,
     entity_channels: dict[str, int] | None = None,
+    entity_name_dps: dict[str, int] | None = None,
 ) -> bool:
     """Sync a display name to ZHA Tuya DPs or Matter User Label."""
 
@@ -346,6 +365,7 @@ async def _sync_device_display_name(
             new_name,
             channel=channel,
             entity_channels=entity_channels or {},
+            entity_name_dps=entity_name_dps or {},
         )
 
     if _is_matter_device(device_entry):

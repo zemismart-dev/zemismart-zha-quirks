@@ -254,11 +254,13 @@ def _update_cached_name(zigpy_endpoint: Any, channel: int, name: str) -> None:
             update_attribute(attr_name, name)
 
 
-async def write_tuya_zha_name(hass, *, ieee: str, channel: int, name: str) -> bool:
+async def write_tuya_zha_name(
+    hass, *, ieee: str, channel: int, name: str, dp_id: int | None = None
+) -> bool:
     """Write a display name to the Tuya ZHA screen-switch name datapoint."""
 
-    dp_id = NAME_DP_BY_CHANNEL.get(channel)
-    if dp_id is None:
+    resolved_dp_id = int(dp_id) if dp_id is not None else NAME_DP_BY_CHANNEL.get(channel)
+    if resolved_dp_id is None or not 1 <= resolved_dp_id <= 255:
         _LOGGER.warning("Unsupported display-name channel: %s", channel)
         return False
 
@@ -283,7 +285,7 @@ async def write_tuya_zha_name(hass, *, ieee: str, channel: int, name: str) -> bo
     tuya_command = TuyaCommand(
         status=0,
         tsn=sequence,
-        datapoints=[TuyaDatapointData(dp_id, raw_value)],
+        datapoints=[TuyaDatapointData(resolved_dp_id, raw_value)],
     )
 
     command_coro = _make_command_coro(mcu_cluster, tuya_command)
@@ -297,7 +299,7 @@ async def write_tuya_zha_name(hass, *, ieee: str, channel: int, name: str) -> bo
         "Tuya ZHA display name sent: ieee=%s channel=%s dp=%s name=%s",
         ieee,
         channel,
-        dp_id,
+        resolved_dp_id,
         name,
     )
     return True
@@ -311,6 +313,7 @@ async def handle_tuya_zha_name_update(
     *,
     channel: int | None = None,
     entity_channels: dict[str, int] | None = None,
+    entity_name_dps: dict[str, int] | None = None,
 ) -> bool:
     """Handle a HA entity-name update by writing the matching Tuya name DP."""
 
@@ -324,10 +327,12 @@ async def handle_tuya_zha_name_update(
         if channel is not None
         else (entity_channels or {}).get(entity_id, get_channel_from_entity_id(entity_id))
     )
+    resolved_dp_id = (entity_name_dps or {}).get(entity_id)
 
     return await write_tuya_zha_name(
         hass,
         ieee=ieee,
         channel=resolved_channel,
         name=str(new_name),
+        dp_id=resolved_dp_id,
     )
