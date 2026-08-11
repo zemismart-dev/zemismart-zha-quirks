@@ -1,7 +1,11 @@
 """ZHA custom quirk for the Zemismart ZMD-206 screen dimmer family.
 
-Validated three-gang fingerprint and DP contract:
+Validated three-gang DP contract:
 ``TS0601 / _TZE28C1000000_k9e7ihec``.
+
+Additional exact three-gang fingerprint observed in a Zigbee2MQTT interview:
+``TS0601 / _TZE284_k9e7ihec``. Its full functional surface is not yet
+physically verified.
 
 The 1- and 2-gang fingerprint variants share the observed channel DP stride.
 All matching remains exact; this quirk never matches TS0601 broadly.
@@ -262,3 +266,4 @@ _register("_TZE28C1000000_5aico93l", 1)
 _register("_TZE284_5aico93l", 1)
 _register("_TZE284_pyh4zt7w", 2)
 _register("_TZE28C1000000_k9e7ihec", 3)
+_register("_TZE284_k9e7ihec", 3)
