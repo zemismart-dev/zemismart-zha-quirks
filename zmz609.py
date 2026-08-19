@@ -222,7 +222,7 @@ class RawBytes(TuyaData):
 
 
 def _name_dp_mapping(attribute_name: str, endpoint_id: int = 1) -> DPToAttributeMapping:
-    """Map a screen name DP to the Tuya MCU attribute used by zha_namehook."""
+    """Map a screen-name DP to its Tuya MCU attribute."""
 
     return DPToAttributeMapping(
         ep_attribute="tuya_mcu",

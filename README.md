@@ -21,12 +21,6 @@
 | `zm90e_td_250n.py` | `TS0601` | `_TZE284_fzo2pocs` | ZM90E-TD-250N 推窗器，支持开/停/关、目标位置与到达位置、电机运行方向切换、开/中/关限位设置与复位、运行模式 |
 | `zmz609.py` | `TS0601` | 2 路: `_TZE284_o409r73p`, `_TZE28C1000000_o409r73p`<br>3 路: `_TZE284_oy1nuaa5` | ZMZ609 美标屏显开关，支持两路/三路开关、计量、屏显和配置项 |
 
-## 自定义组件
-
-| 目录 | 版本 | 说明 |
-| --- | --- | --- |
-| `custom_components/zha_namehook` | `2.1.1` | 屏显开关名称同步组件。用于在 HA 修改实体名称后，把名称同步到 ZHA Tuya 屏显开关 DP；支持按实体覆盖默认 DP105-DP108 映射，同时提供 Matter User Label 可选同步。 |
-
 ## ZHA quirk 安装说明
 
 将需要的 quirk 文件复制到 Home Assistant 的 `/config/zha_quirks/` 目录，并在 `configuration.yaml` 中启用：
@@ -39,47 +33,8 @@ zha:
 
 复制后重启 Home Assistant。如果当前 HA 版本不能加载数字开头、带横杠或中文的 Python 文件名，请将 `214c.py` 改名为 `water_valve_214c.py`，或将 `kes-606-复合开关.py` 改名为 `kes_606_composite_switch.py`，文件内容无需修改。
 
-## zha_namehook 安装说明
+## 屏显名称同步
 
-`zha_namehook` 是 Home Assistant 自定义组件，不是 ZHA quirk 文件。安装路径和上面的 `/config/zha_quirks/` 不同。
-
-复制目录：
-
-```text
-custom_components/zha_namehook
-```
-
-到 HA 配置目录：
-
-```text
-/config/custom_components/zha_namehook
-```
-
-然后在 `configuration.yaml` 增加：
-
-```yaml
-zha_namehook:
-```
-
-保存后重启 Home Assistant。
-
-最简单用法：
-
-1. 在 HA 的 ZHA 设备页或实体页修改屏显开关某一路实体名称。
-2. 保存后等待几秒，开关屏幕名称会自动同步。
-3. 如果没有自动同步，在“开发者工具 -> 动作”里调用 `zha_namehook.sync_entity_name`，选择对应实体后手动同步。
-
-ZHA Tuya 屏显开关通道对应关系：
-
-| 通道 | Tuya 名称 DP |
-| --- | --- |
-| 1 路 | DP105 |
-| 2 路 | DP106 |
-| 3 路 | DP107 |
-| 4 路 | DP108 |
-
-更多服务参数、可选配置和 Matter 说明见：
-
-```text
-custom_components/zha_namehook/README.md
-```
+屏显名称同步功能已迁移到独立的 Home Assistant 自定义集成
+[Screen Switch Name Hook](https://github.com/zemismart-dev/screen-switch-name-hook)。
+本仓库只维护 ZHA quirk；屏显名称同步集成不随本仓库发布。
