@@ -238,6 +238,7 @@ class TuyaQuadrupleSwitch_GP_TZE28C1000000(TuyaSwitch):
 
     signature = _tze28c1000000_signature([
         ("_TZE28C1000000_y4jqpry8", "TS0601"),
+        ("by _TZE28C1000000_y4jqpry8", "TS0601"),
         ("_TZE28C1000000_xibaabmu", "TS0601"),
     ])
     replacement = _replacement(CustomMoesSwitchManufCluster_4G, 4)
