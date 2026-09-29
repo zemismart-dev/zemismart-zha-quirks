@@ -17,6 +17,7 @@
 | `kes-606-复合开关.py` | `TS0726` | `_TZ3000_ovbvmhiq`, `_TZ3000_icoxotza`, `_TZ3000_cziew6eu`, `_TZ3000_hurauima` | KES 606 复合场景开关 1/2/3/4 路，支持 ZHA 开关、开关模式、上电状态和场景事件 |
 | `pm07db_tyz.py` | `TS0601` | `_TZE2841000000_zm8zpwas` | PF-PM07D 电池版 Zigbee 水阀，支持阀门开关、电量和故障码；DP7/DP8 仅内部解析，不创建 HA 实体 |
 | `ts0301_cirjrpxe_zm25z.py` | `TS0301` | `_TZE200_cirjrpxe` | ZM25Z 强电窗帘电机，支持位置、方向和限位动作 |
+| [`zemismart_ts1201_ir_zha.py`](zemismart_ts1201_ir_zha.py) | `TS1201` | `_TZ3290_qazgdsae` | 红外遥控器试点版 1.3.0；品牌匹配、命名学习按键和空调面板须按 [完整安装说明](docs/ts1201_zha_installation.md) 安装配套文件与集成 |
 | `zemismart_zps_z1.py` | `TS0601` | `_TZE284_ft7qqpx3` | ZPS-Z1 24 GHz 毫米波存在传感器，支持占用、照度、检测距离、灵敏度、区域开关、能量阈值和自动校准 |
 | `zmd206_screen_dimmer.py` | `TS0601` | 1 路: `_TZE28C1000000_5aico93l`, `_TZE284_5aico93l`<br>2 路: `_TZE284_pyh4zt7w`<br>3 路: `_TZE28C1000000_k9e7ihec`, `_TZE284_k9e7ihec` | ZMD-206 屏显调光开关，支持每路开关/亮度、亮度上下限、负载类型、倒计时、上电行为、背光、指示灯、童锁、渐变速度和屏显名称回报 |
 | `zemismart_zmr4.py` | `TS0044` | `_TZ3000_xwuveizv` | ZMR4 四键无线遥控器，支持每键单击、双击、长按事件、动作实体、12 个本地模拟按钮及共享电量 |
@@ -45,8 +46,15 @@ zha:
 
 单路 DP19/209/210 仅保留原始诊断并拒绝写入，DP105 名称写入未开放。以上限制与正常支持的功能分别记录，不声明物理全功能验收通过。
 
+## TS1201 红外遥控器试点版
+
+精确匹配 `TS1201 / _TZ3290_qazgdsae`，不覆盖所有 TS1201 同型号设备。
+单独复制 `zemismart_ts1201_ir_zha.py` 只用于基础 Zosung 红外收发与学习支持；完整的品牌码库匹配、空调控制和命名按键面板，请下载完整仓库并按 [TS1201 安装说明](docs/ts1201_zha_installation.md) 安装 `data/`、`custom_components/ts1201_ir/` 和 quirk。配套集成为可选试点扩展，其他设备不依赖它。
+
+此方案面向工程人员部署和有限客户试点，当前配套集成版本为 **1.3.0**。设备显示“传输完成”不等于家电物理响应；已确认的物理范围及学习、断电恢复等待验收项见 [验证记录](docs/ts1201_validation.md)，日常操作见 [使用指南](docs/ts1201_customer_guide.md)。
+
 ## 屏显名称同步
 
 屏显名称同步功能已迁移到独立的 Home Assistant 自定义集成
 [Screen Switch Name Hook](https://github.com/zemismart-dev/screen-switch-name-hook)。
-本仓库只维护 ZHA quirk；屏显名称同步集成不随本仓库发布。
+本仓库以 ZHA quirk 为主，并附带上述 TS1201 可选试点集成；屏显名称同步集成仍独立维护，不随本仓库发布。

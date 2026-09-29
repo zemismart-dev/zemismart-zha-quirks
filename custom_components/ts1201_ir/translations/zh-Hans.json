@@ -1,0 +1,7 @@
+{
+  "title": "TS1201 红外遥控器",
+  "config": {
+    "step": {"user": {"title": "TS1201 红外遥控器", "description": "控制已确认匹配的空调，并管理 TS1201 ZHA 设备中的命名红外按键。尚未配对时也可先添加面板等待设备。添加面板不会发送红外。"}},
+    "abort": {"single_instance_allowed": "只需添加一个 TS1201 红外遥控器面板。", "already_configured": "TS1201 红外遥控器面板已经添加。"}
+  }
+}

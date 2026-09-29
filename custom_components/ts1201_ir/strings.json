@@ -1,0 +1,7 @@
+{
+  "title": "TS1201 IR Remote",
+  "config": {
+    "step": {"user": {"title": "TS1201 IR Remote", "description": "Control a confirmed air-conditioner codebook and manage the named IR keys stored by your TS1201 ZHA quirk. You can add this panel before pairing the device. Setup sends no infrared commands."}},
+    "abort": {"single_instance_allowed": "Only one TS1201 IR panel is needed.", "already_configured": "The TS1201 IR panel is already configured."}
+  }
+}
