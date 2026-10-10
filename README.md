@@ -9,6 +9,7 @@
 | `ZN2S-US01U-ZK.py` | `TS0601` | `_TZE284_rzdkn5rx` | ZN2S-US01U-ZK 单路开关，支持继电器、倒计时、指示灯模式、背光、上电状态、童锁、背光亮度及开/关颜色；未知 DP 仅只读诊断 |
 | `ZN2S-US3U-DH-H.py` | `TS0601` | `_TZE204_znvwzxkq` | ZN2S-US3U-DH-H 三路调光器（按提供的产品截图命名），支持独立开关/亮度、三路亮度上下限、前两路倒计时、上电状态、背光模式/颜色/亮度/开关及童锁；不开放灯类型与第三路倒计时 |
 | `ZMP1.py` | `TS0601` | `_TZE284_6hrnp30w` | ZMP1 链条窗帘/卷帘电机，支持位置、电量自动刷新、方向、限位动作和点动 |
+| `zemismart_zm16b.py` | `TS0601` | `_TZE2841000000_3mzb0sdz` | ZM16B 新批次卷帘电机；沿用内置 ZM16B 的开/停/关、位置、电量、方向和限位映射；旧指纹 `_TZE284_3mzb0sdz` 继续使用内置支持，新批次实机效果待客户验证 |
 | `ZMS-206.py` | `TS0601` | `_TZE284_lnyz4a6v`, `_TZE284_1tnysxwl` | 1 路屏显开关 |
 | `ZMS-206.py` | `TS0601` | `_TZE284_dmckrsxg`, `_TZE284_a2teqi5u`, `_TZE28C1000000_a2teqi5u`, `_TZE204_3ctwoaip` | 2 路屏显开关 |
 | `ZMS-206.py` | `TS0601` | `_TZE284_e4pf6l87`, `_TZE284_xvywzhmi` | 3 路屏显开关 |
@@ -37,6 +38,12 @@ zha:
 复制后重启 Home Assistant。如果当前 HA 版本不能加载数字开头、带横杠或中文的 Python 文件名，请将 `214c.py` 改名为 `water_valve_214c.py`，或将 `kes-606-复合开关.py` 改名为 `kes_606_composite_switch.py`，文件内容无需修改。
 
 替换现有配置时，请移除同一设备的旧文件，避免同时加载重复 quirk。
+
+## ZM16B 新批次指纹
+
+[`zemismart_zm16b.py`](zemismart_zm16b.py) 只匹配 `TS0601 / _TZE2841000000_3mzb0sdz`，沿用 ZHA 内置旧指纹 `_TZE284_3mzb0sdz` 的功能映射；旧指纹继续由内置配置处理。按上面的安装说明复制此文件即可，不需要修改设备的制造商字符串。
+
+配置已通过精确匹配、开/停/关、位置和电量的软件回归检查；尚未验证新批次设备的实际运动、方向、限位及持久化。官方指纹补充已提交 [ZHA PR #5423](https://github.com/zigpy/zha-device-handlers/pull/5423)，官方版本是否已包含支持应以该 PR 和所安装版本为准。文件改编自 Apache-2.0 许可的 ZHA 内置定义，许可全文见 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt)。
 
 ## 两款新增 TS0601 配置的验证范围
 
