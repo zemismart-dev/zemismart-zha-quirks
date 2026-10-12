@@ -1,33 +1,43 @@
-# zemismart-zha-quirks
+# Zemismart ZHA Custom Quirks
 
-用于存储 Zemismart 公司产品相关的 ZHA custom quirk 配置文件。
+English | [简体中文](README.zh-CN.md)
 
-| 配置文件 | ZHA 匹配型号 | 指纹型号 / manufacturerName | 说明 |
+Custom ZHA quirk files for Zemismart products in Home Assistant. Match the complete device fingerprint in the table below before choosing a file; support and validation limits vary by model.
+
+**Zemismart website: [www.zemismart.com](https://www.zemismart.com/)**
+
+## About Zemismart
+
+Zemismart offers smart-home products including motorized curtains and blinds, switches, lighting, sensors, and gateways. Visit the [official website](https://www.zemismart.com/) for product information. Protocol and platform compatibility depend on the specific model; the files in this repository cover only the listed fingerprints and features.
+
+## Device configurations
+
+| Configuration file | ZHA model match | Fingerprint model / manufacturerName | Description |
 | --- | --- | --- | --- |
-| `214c.py` | `TS0601` | `_TZE284_vuwtqx0t` | 214C 超声波水表阀，支持累计用水、阀门开关、自动清洗、瞬时流量、温度和电压 |
-| `223f.py` | `TS0601` | `_TZE200_jt50ea5d` | DN15-223F 超声波热/冷表，支持 DP7 热量计量开关、DP8 累计热量、水量、温度、电压、表号和周期上报 |
-| `ZN2S-US01U-ZK.py` | `TS0601` | `_TZE284_rzdkn5rx` | ZN2S-US01U-ZK 单路开关，支持继电器、倒计时、指示灯模式、背光、上电状态、童锁、背光亮度及开/关颜色；未知 DP 仅只读诊断 |
-| `ZN2S-US3U-DH-H.py` | `TS0601` | `_TZE204_znvwzxkq` | ZN2S-US3U-DH-H 三路调光器（按提供的产品截图命名），支持独立开关/亮度、三路亮度上下限、前两路倒计时、上电状态、背光模式/颜色/亮度/开关及童锁；不开放灯类型与第三路倒计时 |
-| `ZMP1.py` | `TS0601` | `_TZE284_6hrnp30w` | ZMP1 链条窗帘/卷帘电机，支持位置、电量自动刷新、方向、限位动作和点动 |
-| `zemismart_zm16b.py` | `TS0601` | `_TZE2841000000_3mzb0sdz` | ZM16B 新批次卷帘电机；沿用内置 ZM16B 的开/停/关、位置、电量、方向和限位映射；旧指纹 `_TZE284_3mzb0sdz` 继续使用内置支持，新批次实机效果待客户验证 |
-| `ZMS-206.py` | `TS0601` | `_TZE284_lnyz4a6v`, `_TZE284_1tnysxwl` | 1 路屏显开关 |
-| `ZMS-206.py` | `TS0601` | `_TZE284_dmckrsxg`, `_TZE284_a2teqi5u`, `_TZE28C1000000_a2teqi5u`, `_TZE204_3ctwoaip` | 2 路屏显开关 |
-| `ZMS-206.py` | `TS0601` | `_TZE284_e4pf6l87`, `_TZE284_xvywzhmi` | 3 路屏显开关 |
-| `ZMS-206.py` | `TS0601` | `_TZE284_y4jqpry8`, `_TZE28C1000000_y4jqpry8`, `by _TZE28C1000000_y4jqpry8`, `_TZE284_xibaabmu`, `_TZE28C1000000_xibaabmu` | 4 路屏显开关；兼容客户提供的含 `by ` 前缀字符串 |
-| `ZN2S-L01E-SMB.py` | `TS0601` | `_TZE200_ephrk8to`, `_TZE200_ahyyfhqk`, `_TZE200_zuphzsmo`, `_TZE200_6si1pnia` | Zemismart 1/2/3/4 路场景开关，支持开关模式和场景模式切换 |
-| `kes-606-复合开关.py` | `TS0726` | `_TZ3000_ovbvmhiq`, `_TZ3000_icoxotza`, `_TZ3000_cziew6eu`, `_TZ3000_hurauima` | KES 606 复合场景开关 1/2/3/4 路，支持 ZHA 开关、开关模式、上电状态和场景事件 |
-| `pm07db_tyz.py` | `TS0601` | `_TZE2841000000_zm8zpwas` | PF-PM07D 电池版 Zigbee 水阀，支持阀门开关、电量和故障码；DP7/DP8 仅内部解析，不创建 HA 实体 |
-| `ts0301_cirjrpxe_zm25z.py` | `TS0301` | `_TZE200_cirjrpxe` | ZM25Z 强电窗帘电机，支持位置、方向和限位动作 |
-| [`zemismart_ts1201_ir_zha.py`](zemismart_ts1201_ir_zha.py) | `TS1201` | `_TZ3290_qazgdsae` | 红外遥控器试点版 1.3.0；品牌匹配、命名学习按键和空调面板须按 [完整安装说明](docs/ts1201_zha_installation.md) 安装配套文件与集成 |
-| `zemismart_zps_z1.py` | `TS0601` | `_TZE284_ft7qqpx3` | ZPS-Z1 24 GHz 毫米波存在传感器，支持占用、照度、检测距离、灵敏度、区域开关、能量阈值和自动校准 |
-| `zmd206_screen_dimmer.py` | `TS0601` | 1 路: `_TZE28C1000000_5aico93l`, `_TZE284_5aico93l`<br>2 路: `_TZE284_pyh4zt7w`<br>3 路: `_TZE28C1000000_k9e7ihec`, `_TZE284_k9e7ihec` | ZMD-206 屏显调光开关，支持每路开关/亮度、亮度上下限、负载类型、倒计时、上电行为、背光、指示灯、童锁、渐变速度和屏显名称回报 |
-| `zemismart_zmr4.py` | `TS0044` | `_TZ3000_xwuveizv` | ZMR4 四键无线遥控器，支持每键单击、双击、长按事件、动作实体、12 个本地模拟按钮及共享电量 |
-| `zm90e_td_250n.py` | `TS0601` | `_TZE284_fzo2pocs` | ZM90E-TD-250N 推窗器，支持开/停/关、目标位置与到达位置、电机运行方向切换、开/中/关限位设置与复位、运行模式 |
-| `zmz609.py` | `TS0601` | 2 路: `_TZE284_o409r73p`, `_TZE28C1000000_o409r73p`<br>3 路: `_TZE284_oy1nuaa5` | ZMZ609 美标屏显开关，支持两路/三路开关、计量、屏显和配置项 |
+| `214c.py` | `TS0601` | `_TZE284_vuwtqx0t` | 214C ultrasonic water meter valve: total water consumption, valve control, automatic cleaning, instantaneous flow, temperature, and voltage |
+| `223f.py` | `TS0601` | `_TZE200_jt50ea5d` | DN15-223F ultrasonic heating/cooling meter: DP7 heat-metering switch, DP8 accumulated thermal energy, water volume, temperature, voltage, meter number, and periodic reporting |
+| `ZN2S-US01U-ZK.py` | `TS0601` | `_TZE284_rzdkn5rx` | ZN2S-US01U-ZK single-gang switch: relay, countdown, indicator mode, backlight, power-on state, child lock, backlight brightness, and on/off colors; unknown DPs are read-only diagnostics |
+| `ZN2S-US3U-DH-H.py` | `TS0601` | `_TZE204_znvwzxkq` | ZN2S-US3U-DH-H three-gang dimmer (named from the supplied product screenshot): independent switching/brightness, minimum/maximum brightness for all three gangs, countdowns for the first two gangs, power-on state, backlight mode/color/brightness/on/off, and child lock; light type and the third-gang countdown are not exposed |
+| `ZMP1.py` | `TS0601` | `_TZE284_6hrnp30w` | ZMP1 chain curtain/roller-blind motor: position, automatic battery refresh, direction, limit-setting actions, and inching |
+| `zemismart_zm16b.py` | `TS0601` | `_TZE2841000000_3mzb0sdz` | New-batch ZM16B roller-blind motor; reuses the built-in ZM16B open/stop/close, position, battery, direction, and limit mappings; the older `_TZE284_3mzb0sdz` fingerprint continues to use built-in support, and physical behavior of the new batch awaits customer validation |
+| `ZMS-206.py` | `TS0601` | `_TZE284_lnyz4a6v`, `_TZE284_1tnysxwl` | Single-gang display switch |
+| `ZMS-206.py` | `TS0601` | `_TZE284_dmckrsxg`, `_TZE284_a2teqi5u`, `_TZE28C1000000_a2teqi5u`, `_TZE204_3ctwoaip` | Two-gang display switch |
+| `ZMS-206.py` | `TS0601` | `_TZE284_e4pf6l87`, `_TZE284_xvywzhmi` | Three-gang display switch |
+| `ZMS-206.py` | `TS0601` | `_TZE284_y4jqpry8`, `_TZE28C1000000_y4jqpry8`, `by _TZE28C1000000_y4jqpry8`, `_TZE284_xibaabmu`, `_TZE28C1000000_xibaabmu` | Four-gang display switch; also accepts the customer-provided manufacturer string with the `by ` prefix |
+| `ZN2S-L01E-SMB.py` | `TS0601` | `_TZE200_ephrk8to`, `_TZE200_ahyyfhqk`, `_TZE200_zuphzsmo`, `_TZE200_6si1pnia` | Zemismart 1/2/3/4-gang scene switches with switch/scene mode selection |
+| `kes-606-复合开关.py` | `TS0726` | `_TZ3000_ovbvmhiq`, `_TZ3000_icoxotza`, `_TZ3000_cziew6eu`, `_TZ3000_hurauima` | KES 606 composite 1/2/3/4-gang scene switches: ZHA switching, switch mode, power-on state, and scene events |
+| `pm07db_tyz.py` | `TS0601` | `_TZE2841000000_zm8zpwas` | PF-PM07D battery-powered Zigbee water valve: valve control, battery, and fault codes; DP7/DP8 are parsed internally without creating HA entities |
+| `ts0301_cirjrpxe_zm25z.py` | `TS0301` | `_TZE200_cirjrpxe` | ZM25Z mains-powered curtain motor: position, direction, and limit-setting actions |
+| [`zemismart_ts1201_ir_zha.py`](zemismart_ts1201_ir_zha.py) | `TS1201` | `_TZ3290_qazgdsae` | IR remote pilot version 1.3.0; brand matching, named learned buttons, and the air-conditioner panel require the companion files and integration in the [complete installation guide (Chinese)](docs/ts1201_zha_installation.md) |
+| `zemismart_zps_z1.py` | `TS0601` | `_TZE284_ft7qqpx3` | ZPS-Z1 24 GHz mmWave presence sensor: occupancy, illuminance, detection distance, sensitivity, zone switches, energy thresholds, and automatic calibration |
+| `zmd206_screen_dimmer.py` | `TS0601` | 1-gang: `_TZE28C1000000_5aico93l`, `_TZE284_5aico93l`<br>2-gang: `_TZE284_pyh4zt7w`<br>3-gang: `_TZE28C1000000_k9e7ihec`, `_TZE284_k9e7ihec` | ZMD-206 display dimmer: per-gang switching/brightness, brightness limits, load type, countdown, power-on behavior, backlight, indicator, child lock, fade speed, and display-name reporting |
+| `zemismart_zmr4.py` | `TS0044` | `_TZ3000_xwuveizv` | ZMR4 four-button wireless remote: single/double/long-press events for each button, action entities, 12 local simulation buttons, and shared battery reporting |
+| `zm90e_td_250n.py` | `TS0601` | `_TZE284_fzo2pocs` | ZM90E-TD-250N window opener: open/stop/close, target and reached positions, motor-direction switching, open/middle/closed limit setting and reset, and operating mode |
+| `zmz609.py` | `TS0601` | 2-gang: `_TZE284_o409r73p`, `_TZE28C1000000_o409r73p`<br>3-gang: `_TZE284_oy1nuaa5` | ZMZ609 US-style display switch: two/three-gang switching, metering, display, and configuration options |
 
-## ZHA quirk 安装说明
+## Installing a ZHA quirk
 
-将需要的 quirk 文件复制到 Home Assistant 的 `/config/zha_quirks/` 目录，并在 `configuration.yaml` 中启用：
+Copy the required quirk file to Home Assistant's `/config/zha_quirks/` directory and enable it in `configuration.yaml`:
 
 ```yaml
 zha:
@@ -35,33 +45,34 @@ zha:
   custom_quirks_path: /config/zha_quirks
 ```
 
-复制后重启 Home Assistant。如果当前 HA 版本不能加载数字开头、带横杠或中文的 Python 文件名，请将 `214c.py` 改名为 `water_valve_214c.py`，或将 `kes-606-复合开关.py` 改名为 `kes_606_composite_switch.py`，文件内容无需修改。
+Restart Home Assistant after copying the file. If your HA version cannot load Python filenames that begin with a digit or contain hyphens or Chinese characters, rename `214c.py` to `water_valve_214c.py`, or `kes-606-复合开关.py` to `kes_606_composite_switch.py`. No changes to the file contents are needed.
 
-替换现有配置时，请移除同一设备的旧文件，避免同时加载重复 quirk。
+When replacing an existing configuration, remove the old file for the same device to avoid loading duplicate quirks.
 
-## ZM16B 新批次指纹
+## ZM16B new-batch fingerprint
 
-[`zemismart_zm16b.py`](zemismart_zm16b.py) 只匹配 `TS0601 / _TZE2841000000_3mzb0sdz`，沿用 ZHA 内置旧指纹 `_TZE284_3mzb0sdz` 的功能映射；旧指纹继续由内置配置处理。按上面的安装说明复制此文件即可，不需要修改设备的制造商字符串。
+[`zemismart_zm16b.py`](zemismart_zm16b.py) matches only `TS0601 / _TZE2841000000_3mzb0sdz` and reuses the feature mappings for ZHA's built-in older fingerprint, `_TZE284_3mzb0sdz`. The older fingerprint remains handled by built-in support. Copy this file using the installation instructions above; there is no need to change the device's manufacturer string.
 
-配置已通过精确匹配、开/停/关、位置和电量的软件回归检查；尚未验证新批次设备的实际运动、方向、限位及持久化。官方指纹补充已提交 [ZHA PR #5423](https://github.com/zigpy/zha-device-handlers/pull/5423)，官方版本是否已包含支持应以该 PR 和所安装版本为准。文件改编自 Apache-2.0 许可的 ZHA 内置定义，许可全文见 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt)。
+The configuration has passed software regression checks for exact matching, open/stop/close, position, and battery. Actual movement, direction, limits, and persistence on the new batch have not yet been verified. The upstream fingerprint addition was submitted in [ZHA PR #5423](https://github.com/zigpy/zha-device-handlers/pull/5423); check that PR and your installed version to determine whether upstream support is included. This file is adapted from ZHA's Apache-2.0-licensed built-in definition. See [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt) for the complete license.
 
-## 两款新增 TS0601 配置的验证范围
+## Validation scope for the two additional TS0601 configurations
 
-`ZN2S-US01U-ZK.py` 与 `ZN2S-US3U-DH-H.py` 均为独立 Quirk v2 文件，只匹配表中完整指纹，不依赖其他自定义文件。2026-09-28 已在 Home Assistant 2026.8.0、ZHA 2.1.0、zigpy 2.1.0、zha-quirks 2.2.0 环境验证加载、实体生成及设备协议收发；不据此承诺更旧版本兼容。实际灯光/指示灯颜色、本地按键童锁及断电恢复仍待现场确认。
+`ZN2S-US01U-ZK.py` and `ZN2S-US3U-DH-H.py` are standalone Quirk v2 files that match only the complete fingerprints listed in the table and do not depend on other custom files. Loading, entity creation, and device protocol transmission/reception were verified on 2026-09-28 with Home Assistant 2026.8.0, ZHA 2.1.0, zigpy 2.1.0, and zha-quirks 2.2.0. This does not establish compatibility with older versions. Actual light/indicator colors, the physical-button child lock, and recovery after a power interruption still require on-site confirmation.
 
-三路文件按提供的产品截图命名为 `ZN2S-US3U-DH-H.py`，上游同指纹别名为 ZN2S-RS3E-DH。此次仅更名，ZHA 界面仍使用 `TS0601 3-gang dimmer`，设备识别以表中的完整指纹为准。DP4/10 有重复和未定义值回报，仅保留原始诊断并拒绝写入；DP18/20/102/105 尚未开放，第三路倒计时不受支持。前两路短倒计时已收到自动关闭回报，但第一路的自动归零独立回报尚未证实。
+The three-gang file is named `ZN2S-US3U-DH-H.py` based on the supplied product screenshot; the upstream alias for the same fingerprint is ZN2S-RS3E-DH. Only the filename was changed: the ZHA interface still uses `TS0601 3-gang dimmer`. Identify the device by its complete fingerprint in the table. DP4/10 have duplicate and undefined reported values and are kept as raw diagnostics with writes rejected. DP18/20/102/105 are not exposed, and the third-gang countdown is unsupported. Automatic-off reports were received for short countdowns on the first two gangs, but a separate report resetting the first-gang countdown to zero has not been confirmed.
 
-单路 DP19/209/210 仅保留原始诊断并拒绝写入，DP105 名称写入未开放。以上限制与正常支持的功能分别记录，不声明物理全功能验收通过。
+On the single-gang device, DP19/209/210 are raw diagnostics only and reject writes; DP105 name writing is not exposed. These limitations are recorded separately from supported features; complete physical acceptance of all features is not claimed.
 
-## TS1201 红外遥控器试点版
+## TS1201 IR remote pilot
 
-精确匹配 `TS1201 / _TZ3290_qazgdsae`，不覆盖所有 TS1201 同型号设备。
-单独复制 `zemismart_ts1201_ir_zha.py` 只用于基础 Zosung 红外收发与学习支持；完整的品牌码库匹配、空调控制和命名按键面板，请下载完整仓库并按 [TS1201 安装说明](docs/ts1201_zha_installation.md) 安装 `data/`、`custom_components/ts1201_ir/` 和 quirk。配套集成为可选试点扩展，其他设备不依赖它。
+Matches exactly `TS1201 / _TZ3290_qazgdsae`, not every device with the TS1201 model name.
 
-此方案面向工程人员部署和有限客户试点，当前配套集成版本为 **1.3.0**。设备显示“传输完成”不等于家电物理响应；已确认的物理范围及学习、断电恢复等待验收项见 [验证记录](docs/ts1201_validation.md)，日常操作见 [使用指南](docs/ts1201_customer_guide.md)。
+Copying `zemismart_ts1201_ir_zha.py` alone provides basic Zosung IR transmission, reception, and learning support. For full brand/codebook matching, air-conditioner control, and named-button panels, download the complete repository and install `data/`, `custom_components/ts1201_ir/`, and the quirk according to the [TS1201 installation guide (Chinese)](docs/ts1201_zha_installation.md). The companion integration is an optional pilot extension; other devices do not depend on it.
 
-## 屏显名称同步
+This solution is intended for engineering deployment and limited customer pilots. The companion integration version documented here is **1.3.0**. A device status of “transmission complete” does not confirm that the appliance physically responded. See the [validation record (Chinese)](docs/ts1201_validation.md) for confirmed physical behavior and pending acceptance items, including learning and recovery after a power interruption. See the [user guide (Chinese)](docs/ts1201_customer_guide.md) for everyday operation.
 
-屏显名称同步功能已迁移到独立的 Home Assistant 自定义集成
-[Screen Switch Name Hook](https://github.com/zemismart-dev/screen-switch-name-hook)。
-本仓库以 ZHA quirk 为主，并附带上述 TS1201 可选试点集成；屏显名称同步集成仍独立维护，不随本仓库发布。
+## Display-name synchronization
+
+Display-name synchronization has moved to the separate Home Assistant custom integration [Screen Switch Name Hook](https://github.com/zemismart-dev/screen-switch-name-hook).
+
+This repository primarily contains ZHA quirks, together with the optional TS1201 pilot integration described above. The display-name synchronization integration is maintained separately and is not distributed with this repository.
