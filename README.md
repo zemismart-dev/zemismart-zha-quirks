@@ -33,6 +33,7 @@ Zemismart offers smart-home products including motorized curtains and blinds, sw
 | `zmd206_screen_dimmer.py` | `TS0601` | 1-gang: `_TZE28C1000000_5aico93l`, `_TZE284_5aico93l`<br>2-gang: `_TZE284_pyh4zt7w`<br>3-gang: `_TZE28C1000000_k9e7ihec`, `_TZE284_k9e7ihec` | ZMD-206 display dimmer: per-gang switching/brightness, brightness limits, load type, countdown, power-on behavior, backlight, indicator, child lock, fade speed, and display-name reporting |
 | `zemismart_zmr4.py` | `TS0044` | `_TZ3000_xwuveizv` | ZMR4 four-button wireless remote: single/double/long-press events for each button, action entities, 12 local simulation buttons, and shared battery reporting |
 | `zm90e_td_250n.py` | `TS0601` | `_TZE284_fzo2pocs` | ZM90E-TD-250N window opener: open/stop/close, target and reached positions, motor-direction switching, open/middle/closed limit setting and reset, and operating mode |
+| [`zw_eu_02_ps.py`](zw_eu_02_ps.py) | `ZW-EU-02-PS` | `TS0601 / _TZE284_qgtqlkhm` | Two-channel in-wall relay with individual and master switches, per-channel countdowns, current, power, voltage, and MCU time sync. Pairing, entity creation, and unloaded device readback verified on Home Assistant 2026.8.0 / ZHA 2.1.0. |
 | `zmz609.py` | `TS0601` | 2-gang: `_TZE284_o409r73p`, `_TZE28C1000000_o409r73p`<br>3-gang: `_TZE284_oy1nuaa5` | ZMZ609 US-style display switch: two/three-gang switching, metering, display, and configuration options |
 
 ## Installing a ZHA quirk
